@@ -21,4 +21,3 @@ set(SOURCES
 message("${SOURCES}")
 
 add_executable(${PROJECT} ${SOURCES})
-add_executable(${PROJECT}.html ${SOURCES})
