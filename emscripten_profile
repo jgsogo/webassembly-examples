@@ -1,0 +1,4 @@
+include(default)
+
+[build_requires]
+emsdk_installer/1.38.16@jgsogo/stable
