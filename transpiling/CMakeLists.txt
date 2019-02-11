@@ -14,6 +14,8 @@ message(" - CC: ${CC}")
 message(" - CXX: ${CXX}")
 message(" - TOOLCHAIN: ${CMAKE_TOOLCHAIN_FILE}")
 message(" - EMSCRIPTEN: ${EMSCRIPTEN}")
+message(" - WASM: ${WASM}")
+
 
 set(SOURCES 
         "${CMAKE_CURRENT_SOURCE_DIR}/main.cpp"
