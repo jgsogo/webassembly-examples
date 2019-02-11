@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300" rel="stylesheet"> 
+  <title>Mandelbrot using WebAssembly</title>
+  <style>
+    html, body {
+      padding: 0;
+      margin: 0;
+      text-align: center;
+      font-family: 'Open Sans', sans-serif;
+      font-size: 100%;
+      font-weight: 300;
+    }
+    h1 {
+      font-size: 1.2rem;
+    }
+    p {
+      font-size: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <h1>Mandelbrot Image Viewer: Emscripten + WebAssembly</h1>
+  <canvas id="canvas" width="1200" height="800"></canvas>
+  
+  <script type="text/javascript" src="mandelbrot.js"></script>
+
+  <script type="text/javascript">
+    var Module = {
+      onRuntimeInitialized: function() {
+        console.log('get_number result: ' + Module.get_number());
+
+        var linearMemory = Module.get_image();
+
+        var canvas = document.getElementById('canvas');
+        var context = canvas.getContext('2d');
+        const imgData = context.createImageData(1200, 800);
+        for (let i = 0; i < linearMemory.length; i++) {
+          imgData.data[i] = linearMemory[i];
+        }
+        context.putImageData(imgData, 0, 0);
+        
+        console.log(linearMemory.length);
+        console.log("FIN");
+      }
+    };
+
+    /*
+    function get_number() {
+      return Module._get_number();
+    }
+    
+    Module.onRuntimeInitialized = function() {
+      console.info("Running");
+      console.log(get_number());
+
+      const offset = Module._getImage();
+      
+      var canvas = document.getElementById('canvas');
+      var context = canvas.getContext('2d');
+
+      const imgData = context.createImageData(600, 600);
+      const linearMemory = new Uint8Array(Module.HEAPU8.buffer, offset, 600 * 600 * 4);
+      for (let i = 0; i < linearMemory.length; i++) {
+        imgData.data[i] = linearMemory[i];
+        
+      }
+      context.putImageData(imgData, 0, 0);
+
+      console.log("FIN");
+    }
+    */
+  </script>
+
+</body>
+</html>
