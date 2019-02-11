@@ -1,7 +1,7 @@
 from conans import ConanFile, CMake
 
 class TranspilingExample(ConanFile):
-    name = "transpiling"
+    name = "minimal"
     version = "0.0"
 
     settings = "os", "arch", "compiler", "build_type"
