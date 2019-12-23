@@ -9,13 +9,6 @@ const int WIDTH = 1200;
 const int HEIGHT = 800;
 unsigned char image[WIDTH * HEIGHT * 4];
 
-/*
-extern "C" {
-   unsigned char* getImage();
-   int get_number();
-}
-*/
-
 unsigned char colour(int iteration, int offset, int scale) {
   iteration = ((iteration * scale) + offset) % 1024;
   if (iteration < 256) {
@@ -62,23 +55,11 @@ void mandelbrot(int maxIterations, double cx, double cy, double diameter) {
   }
 }
 
-/*
-unsigned char* getImage() {
-  for (int i = 0; i < 10; i++) {
-    mandelbrot(10000, -0.7436447860, 0.1318252536, 0.00029336);
-  }
-
-  return &image[0];
-}
-*/
-
-emscripten::val get_image() {
-    for (int i = 0; i < 10; i++) {
-        mandelbrot(10000, -0.7436447860, 0.1318252536, 0.00029336);
+emscripten::val get_image(float diam_multiplier) {
+    for (int i = 0; i < 1; i++) {
+        mandelbrot(1000, -0.7436447860, 0.1318252536, 0.00029336*diam_multiplier);
     }
-
     return emscripten::val(emscripten::typed_memory_view(WIDTH * HEIGHT * 4, image));
-    //return &image[0];
 }
 
 

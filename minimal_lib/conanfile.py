@@ -1,6 +1,6 @@
 from conans import ConanFile, CMake
 
-class TranspilingExample(ConanFile):
+class MinimalExample(ConanFile):
     name = "minimal"
     version = "0.0"
 

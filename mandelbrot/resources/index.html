@@ -21,12 +21,56 @@
     p {
       font-size: 1rem;
     }
+
+    .slidecontainer {
+  width: 100%; /* Width of the outside container */
+}
+
+/* The slider itself */
+.slider {
+  -webkit-appearance: none;  /* Override default CSS styles */
+  appearance: none;
+  width: 100%; /* Full-width */
+  height: 25px; /* Specified height */
+  background: #d3d3d3; /* Grey background */
+  outline: none; /* Remove outline */
+  opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
+  -webkit-transition: .2s; /* 0.2 seconds transition on hover */
+  transition: opacity .2s;
+}
+
+/* Mouse-over effects */
+.slider:hover {
+  opacity: 1; /* Fully shown on mouse-over */
+}
+
+/* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */ 
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none; /* Override default look */
+  appearance: none;
+  width: 25px; /* Set a specific slider handle width */
+  height: 25px; /* Slider handle height */
+  background: #4CAF50; /* Green background */
+  cursor: pointer; /* Cursor on hover */
+}
+
+.slider::-moz-range-thumb {
+  width: 25px; /* Set a specific slider handle width */
+  height: 25px; /* Slider handle height */
+  background: #4CAF50; /* Green background */
+  cursor: pointer; /* Cursor on hover */
+}
+
   </style>
 </head>
 <body>
   <h1>Mandelbrot Image Viewer: Emscripten + WebAssembly</h1>
   <canvas id="canvas" width="1200" height="800"></canvas>
   
+  <div class="slidecontainer">
+    <input type="range" min="1" max="100" value="50" class="slider" id="myRange">
+  </div>
+
   <script type="text/javascript" src="mandelbrot.js"></script>
 
   <script type="text/javascript">
@@ -34,7 +78,7 @@
       onRuntimeInitialized: function() {
         console.log('get_number result: ' + Module.get_number());
 
-        var linearMemory = Module.get_image();
+        var linearMemory = Module.get_image(0.9);
 
         var canvas = document.getElementById('canvas');
         var context = canvas.getContext('2d');
@@ -44,36 +88,20 @@
         }
         context.putImageData(imgData, 0, 0);
         
-        console.log(linearMemory.length);
-        console.log("FIN");
+        // Crear y configurar slider
+        var slider = document.getElementById("myRange");
+        var output = document.getElementById("demo");
+        // Update the current slider value (each time you drag the slider handle)
+        slider.oninput = function() {          
+          var linearMemory = Module.get_image(this.value/100);
+          for (let i = 0; i < linearMemory.length; i++) {
+            imgData.data[i] = linearMemory[i];
+          }
+          context.putImageData(imgData, 0, 0);
+        }
+
       }
     };
-
-    /*
-    function get_number() {
-      return Module._get_number();
-    }
-    
-    Module.onRuntimeInitialized = function() {
-      console.info("Running");
-      console.log(get_number());
-
-      const offset = Module._getImage();
-      
-      var canvas = document.getElementById('canvas');
-      var context = canvas.getContext('2d');
-
-      const imgData = context.createImageData(600, 600);
-      const linearMemory = new Uint8Array(Module.HEAPU8.buffer, offset, 600 * 600 * 4);
-      for (let i = 0; i < linearMemory.length; i++) {
-        imgData.data[i] = linearMemory[i];
-        
-      }
-      context.putImageData(imgData, 0, 0);
-
-      console.log("FIN");
-    }
-    */
   </script>
 
 </body>

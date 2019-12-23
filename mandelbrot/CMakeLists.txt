@@ -16,7 +16,7 @@ message(" - TOOLCHAIN: ${CMAKE_TOOLCHAIN_FILE}")
 message(" - EMSCRIPTEN: ${EMSCRIPTEN}")
 message(" - WASM: ${WASM}")
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --bind ")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --bind -O3")
 
 set(SOURCES 
         "${CMAKE_CURRENT_SOURCE_DIR}/main.cpp"
